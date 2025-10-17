@@ -20,7 +20,7 @@
          <tooltip>
             <Tooltip text="Put your MidleInitial letter" />
          </tooltip></TextField>
-      <TextField fx:id="Street" layoutX="334.0" layoutY="257.0" prefHeight="25.0" prefWidth="376.0" promptText="Street">
+      <TextField fx:id="Street" layoutX="334.0" layoutY="259.0" prefHeight="25.0" prefWidth="376.0" promptText="Street">
          <tooltip>
             <Tooltip text="Put here your adress" />
          </tooltip></TextField>
@@ -53,18 +53,17 @@
             <Tooltip text="Repeat your password" />
          </tooltip></PasswordField>
       <Button fx:id="SignUp" layoutX="739.0" layoutY="595.0" mnemonicParsing="false" text="Sign Up" />
-      <Button fx:id="OjoContra" layoutX="720.0" layoutY="477.0" mnemonicParsing="false" text="ojo" />
-      <Button fx:id="OjoValidacion" layoutX="720.0" layoutY="513.0" mnemonicParsing="false" text="ojo" />
       <Label layoutX="287.0" layoutY="154.0" text="Name " />
       <Label layoutX="261.0" layoutY="191.0" text="Lastname " />
       <Label layoutX="258.0" layoutY="227.0" text="Midleinitial " />
-      <Label layoutX="288.0" layoutY="262.0" text="Street " />
-      <Label layoutX="304.0" layoutY="300.0" text="City " />
+      <Label layoutX="287.0" layoutY="264.0" text="Street " />
+      <Label layoutX="305.0" layoutY="300.0" text="City " />
       <Label layoutX="292.0" layoutY="339.0" text="State" />
       <Label layoutX="308.0" layoutY="376.0" text="ZIP " />
       <Label layoutX="287.0" layoutY="411.0" text="Phone " />
       <Label layoutX="289.0" layoutY="444.0" text="Email " />
       <Label layoutX="268.0" layoutY="482.0" text="Password " />
       <Label layoutX="217.0" layoutY="518.0" text="Repeat Password " />
+      <Button fx:id="Exit" layoutX="460.0" layoutY="620.0" mnemonicParsing="false" text="Exit" />
    </children>
 </Pane>
