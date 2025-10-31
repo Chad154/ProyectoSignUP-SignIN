@@ -54,7 +54,7 @@
                 <Tooltip text="Put your email with this format &quot;Example@example.example" />
             </tooltip>
         </TextField>
-        <PasswordField fx:id="pwPaswword" layoutX="334.0" layoutY="477.0" prefHeight="25.0" prefWidth="376.0" promptText="Password">
+        <PasswordField fx:id="pwPassword" layoutX="334.0" layoutY="477.0" prefHeight="25.0" prefWidth="376.0" promptText="Password">
             <tooltip>
                 <Tooltip text="At least 8 characters" />
             </tooltip>
