@@ -95,13 +95,13 @@ public class SignUPController {
         try {
             //Validacion de el tamaño del campo
             if (tfName.getText().trim().length() > 255) {
-                new Alert(AlertType.INFORMATION, "El nombre no puede contener más de 255 caracteres").showAndWait();
+                new Alert(AlertType.INFORMATION, "El nombre no puede contener más de 255 caracteres").showAndWait(); 
                 return;
             } else if (tfLastname.getText().trim().length() > 255) {
                 new Alert(AlertType.INFORMATION, "El apellido no puede contener más de 255 caracteres").showAndWait();
                 return;
             } else if (tfMidleeInitial.getText().trim().length() > 255) {
-                new Alert(AlertType.INFORMATION, "El apartado MidleeInitial no puede contener más de 255 caracteres").showAndWait();
+                new Alert(AlertType.INFORMATION, "El apartado MidleeInitial no puede contener \nmás de 255 caracteres").showAndWait();
                 return;
             } else if (tfStreet.getText().trim().length() > 255) {
                 new Alert(AlertType.INFORMATION, "La calle no puede contener más de 255 caracteres").showAndWait();
@@ -131,7 +131,7 @@ public class SignUPController {
 
             // Validación Email: debe tener algo antes y después de @
             if (!tfEmail.getText().trim().matches("^.+@.+\\..+$")) {
-                new Alert(AlertType.INFORMATION, "Tu email no es valida debe tener este formato ejemplo@ejemplo.ejemplo.").showAndWait();
+                new Alert(AlertType.INFORMATION, "Tu email no es valida debe tener \neste formato ejemplo@ejemplo.ejemplo.").showAndWait();
                 return;
             }
 
