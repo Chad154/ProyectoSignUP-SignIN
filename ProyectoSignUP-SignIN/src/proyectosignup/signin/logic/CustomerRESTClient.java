@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package proyectosignup.signin.logic;
 
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Jersey REST client generated for REST resource:CustomerFacadeREST
@@ -22,22 +20,21 @@ import javax.ws.rs.core.MediaType;
  *        client.close();
  * </pre>
  *
- * @author Daniel López López
+ * @author chad,imad and dani
  */
-
 public class CustomerRESTClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/CRUDBankServerSide/webresources";
+    private static final String BASE_URI = "http://192.168.30.15:8080/CRUDBankServerSide/webresources";
 
     public CustomerRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("customer");
     }
-    //he cambiado esto para que funcione con el lado servidor
+
     public void edit_XML(Object requestEntity) throws ClientErrorException {
-        webTarget.request(MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, MediaType.APPLICATION_XML));
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     public void edit_JSON(Object requestEntity) throws ClientErrorException {
@@ -69,7 +66,7 @@ public class CustomerRESTClient {
     }
 
     public void create_XML(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),requestEntity.getClass());
     }
 
     public void create_JSON(Object requestEntity) throws ClientErrorException {
