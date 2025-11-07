@@ -20,13 +20,13 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author imad
+ * @author chad,imad
  */
 public class CustomerRESTClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://192.168.30.11:8080/CRUDBankServerSide/webresources";
+    private static final String BASE_URI = "http://192.168.30.15:8080/CRUDBankServerSide/webresources";
 
     public CustomerRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -66,7 +66,7 @@ public class CustomerRESTClient {
     }
 
     public void create_XML(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),requestEntity.getClass());
     }
 
     public void create_JSON(Object requestEntity) throws ClientErrorException {
