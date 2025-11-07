@@ -86,7 +86,6 @@ public class SignUPController {
     }
 
     // ---------------------- BOTONES ----------------------
-
     private void handlebExitMethod(ActionEvent event) {
         Platform.exit();
     }
@@ -95,27 +94,59 @@ public class SignUPController {
         CustomerRESTClient client = null;
         try {
             //Validacion de el tamaño del campo
-            if(tfName.getText().trim().length() > 255){
-                new Alert(AlertType.INFORMATION,"El nombre no puede contener mas de 255 caracteres").showAndWait();  
-            }else if(tfLastname.getText().trim().length() > 255){
-                new Alert(AlertType.INFORMATION,"El apellido no puede contener mas de 255 caracteres").showAndWait(); 
-            }else if(tfMidleeInitial.getText().trim().length() > 255){
-                new Alert(AlertType.INFORMATION,"El apartado MidleeInitial no puede contener mas de 255 caracteres").showAndWait(); 
-            }else if(tfStreet.getText().trim().length() > 255){
-                new Alert(AlertType.INFORMATION,"La calle no puede contener mas de 255 caracteres").showAndWait(); 
-            }else if(tfCity.getText().trim().length() > 255){
-                new Alert(AlertType.INFORMATION,"La ciudad no puede contener mas de 255 caracteres").showAndWait(); 
-            }else if(tfState.getText().trim().length() > 255){
-                new Alert(AlertType.INFORMATION,"El estado no puede contener mas de 255 caracteres").showAndWait(); 
-            }else if(tfZip.getText().trim().length() > 19){
-                new Alert(AlertType.INFORMATION,"El ZIP no puede contener mas de 19 caracteres").showAndWait(); 
-            }else if(tfPhone.getText().trim().length() > 19){
-                new Alert(AlertType.INFORMATION,"El telefono no puede contener mas de 19 caracteres").showAndWait(); 
+            if (tfName.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "El nombre no puede contener más de 255 caracteres").showAndWait();
+                return;
+            } else if (tfLastname.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "El apellido no puede contener más de 255 caracteres").showAndWait();
+                return;
+            } else if (tfMidleeInitial.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "El apartado MidleeInitial no puede contener más de 255 caracteres").showAndWait();
+                return;
+            } else if (tfStreet.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "La calle no puede contener más de 255 caracteres").showAndWait();
+                return;
+            } else if (tfCity.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "La ciudad no puede contener más de 255 caracteres").showAndWait();
+                return;
+            } else if (tfState.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "El estado no puede contener más de 255 caracteres").showAndWait();
+                return;
+            } else if (pwPassword.getText().trim().length() > 255) {
+                new Alert(AlertType.INFORMATION, "La contraseña no puede contener más de 255 caracteres").showAndWait();
+                return;
             }
+
+            // Validación ZIP no mas de 9 numeros
+            if (!tfZip.getText().trim().matches("\\d{1,10}")) {
+                new Alert(AlertType.INFORMATION, "El campo ZIP debe contener máximo 10 números.").showAndWait();
+                return;
+            }
+
+            // Validación Teléfono no mas de 19 numeros
+            if (!tfPhone.getText().trim().matches("\\d{1,19}")) {
+                new Alert(AlertType.INFORMATION, "El campo Teléfono debe contener máximo 19 números.").showAndWait();
+                return;
+            }
+
+            // Validación Email: debe tener algo antes y después de @
+            if (!tfEmail.getText().trim().matches("^.+@.+\\..+$")) {
+                new Alert(AlertType.INFORMATION, "Tu email no es valida debe tener este formato ejemplo@ejemplo.ejemplo.").showAndWait();
+                return;
+            }
+
+            // Validación Contraseña: mínimo 8 caracteres
+            if (pwPassword.getText().trim().length() < 8) {
+                new Alert(AlertType.INFORMATION, "La contraseña debe tener al menos 8 caracteres.").showAndWait();
+                return;
+            }
+
             // Validar contraseñas iguales
-            else if (!pwPassword.getText().equals(pfPasswordValidation.getText())) {
+            if (!pwPassword.getText().equals(pfPasswordValidation.getText())) {
                 new Alert(AlertType.ERROR, "Las contraseñas no coinciden").showAndWait();
+                return;
             }
+
             // Crear nuevo cliente
             Customer customer = new Customer();
             customer.setFirstName(tfName.getText().trim());
@@ -128,27 +159,30 @@ public class SignUPController {
             customer.setPhone(Long.parseLong(tfPhone.getText().trim()));
             customer.setEmail(tfEmail.getText().trim());
             customer.setPassword(pwPassword.getText().trim());
-            
+
             client = new CustomerRESTClient();
             client.create_XML(customer);
             client.close();
 
             new Alert(AlertType.INFORMATION, "Usuario creado correctamente").showAndWait();
             clearForm();
-        }catch (InternalServerErrorException e){
+            
+        //Manejo de excepciones
+        } catch (InternalServerErrorException e) {
             LOGGER.warning(e.getLocalizedMessage());
             new Alert(AlertType.INFORMATION, "Error con el servidor").showAndWait();
-        }catch(ForbiddenException e) {
+        } catch (ForbiddenException e) {
             LOGGER.warning(e.getLocalizedMessage());
-            new Alert(AlertType.INFORMATION, "Error el email ya existe").showAndWait();
-        }
-        catch (Exception e) {
+            new Alert(AlertType.INFORMATION, "Error: el email ya existe").showAndWait();
+        } catch (NumberFormatException e) {
+            new Alert(AlertType.ERROR, "El ZIP o el Teléfono deben ser numéricos").showAndWait();
+        } catch (Exception e) {
             new Alert(AlertType.ERROR, "Error al crear usuario:\n" + e.getMessage()).showAndWait();
             LOGGER.severe("Error en SignUp: " + e.getMessage());
         }
     }
 
-    /** Limpia todos los campos */
+    // Limpia todos los campos
     private void clearForm() {
         tfName.clear();
         tfLastname.clear();
@@ -161,24 +195,23 @@ public class SignUPController {
         tfEmail.clear();
         pwPassword.clear();
         pfPasswordValidation.clear();
-        btSignUp.setDisable(true);
         tfName.requestFocus();
     }
 
-    /** Valida si todos los campos están rellenados para habilitar el botón Sign Up */
+    // Valida si todos los campos están rellenados para habilitar el botón Sign Up
     private void validateForm(ObservableValue<? extends String> obs, String oldVal, String newVal) {
-        boolean allFilled =
-                !tfName.getText().trim().isEmpty() &&
-                !tfLastname.getText().trim().isEmpty() &&
-                !tfMidleeInitial.getText().trim().isEmpty() &&
-                !tfStreet.getText().trim().isEmpty() &&
-                !tfCity.getText().trim().isEmpty() &&
-                !tfState.getText().trim().isEmpty() &&
-                !tfZip.getText().trim().isEmpty() &&
-                !tfPhone.getText().trim().isEmpty() &&
-                !tfEmail.getText().trim().isEmpty() &&
-                !pwPassword.getText().trim().isEmpty() &&
-                !pfPasswordValidation.getText().trim().isEmpty();
+        boolean allFilled
+                = !tfName.getText().trim().isEmpty()
+                && !tfLastname.getText().trim().isEmpty()
+                && !tfMidleeInitial.getText().trim().isEmpty()
+                && !tfStreet.getText().trim().isEmpty()
+                && !tfCity.getText().trim().isEmpty()
+                && !tfState.getText().trim().isEmpty()
+                && !tfZip.getText().trim().isEmpty()
+                && !tfPhone.getText().trim().isEmpty()
+                && !tfEmail.getText().trim().isEmpty()
+                && !pwPassword.getText().trim().isEmpty()
+                && !pfPasswordValidation.getText().trim().isEmpty();
 
         btSignUp.setDisable(!allFilled);
     }
