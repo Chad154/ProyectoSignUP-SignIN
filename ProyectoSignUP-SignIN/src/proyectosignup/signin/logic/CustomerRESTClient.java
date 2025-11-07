@@ -20,7 +20,7 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author chad,imad
+ * @author chad,imad and dani
  */
 public class CustomerRESTClient {
 
@@ -89,6 +89,10 @@ public class CustomerRESTClient {
 
     public void close() {
         client.close();
+    }
+
+    private Object request(String APPLICATION_XML) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
