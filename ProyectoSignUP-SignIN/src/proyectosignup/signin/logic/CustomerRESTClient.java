@@ -20,13 +20,13 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author chad
+ * @author chad,imad
  */
 public class CustomerRESTClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/CRUDBankServerSide/webresources";
+    private static final String BASE_URI = "http://192.168.30.15:8080/CRUDBankServerSide/webresources";
 
     public CustomerRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
