@@ -1,10 +1,14 @@
 package proyectosignup.signin.ui;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -86,8 +90,25 @@ public class SignUPController {
     }
 
     // ---------------------- BOTONES ----------------------
-    private void handlebExitMethod(ActionEvent event) {
-        Platform.exit();
+   private void handlebExitMethod(ActionEvent event) {
+            try {
+        // Cerrar la ventana actual (Sign Up)
+        Stage ventanaActual = (Stage) btExit.getScene().getWindow();
+        ventanaActual.close();
+
+        // Cargar la ventana de Log In
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
+        Parent root = loader.load();
+
+        // Crear y mostrar la nueva ventana
+        Stage nuevaVentana = new Stage();
+        nuevaVentana.setTitle("Sign In");
+        nuevaVentana.setScene(new Scene(root));
+        nuevaVentana.show();
+
+    } catch (IOException e) {
+        LOGGER.severe("Error al abrir la ventana de Sign In: " + e.getMessage());
+    }
     }
 
     private void handlebSignUpMethod(ActionEvent event) {

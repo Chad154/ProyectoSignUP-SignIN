@@ -19,7 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import javax.ws.rs.InternalServerErrorException;
 import proyectosignup.signin.logic.CustomerRESTClient;
-import proyectosignup.singin.model.Customer;
+import proyectosignup.signin.model.Customer;
 /**
  * Controlador para la ventana de cambio de contraseña.
  * Gestiona la interfaz de usuario y la lógica para cambiar la contraseña del cliente.
