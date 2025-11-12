@@ -5,12 +5,14 @@
  */
 package proyectosignup.signin.ui;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -59,6 +61,7 @@ public class SignInController {
         //asociar eventos a manejadores
         bExit.setOnAction(this::handlebExitMethod);
         bLogIn.setOnAction(this::handlebLogInMethod);
+        Hipervinculo.setOnAction(this::handleHiperVinculoMethod);
         //asociacion de manejadores a properties
         tfUsername.textProperty().addListener(this::handletfUsernameTextChange);
         tfUsername.focusedProperty().addListener(this::handletfUsernameFocusChange);
@@ -73,6 +76,36 @@ public class SignInController {
         stage.show();
 
     }
+    //hipervinculo
+    private void handleHiperVinculoMethod(ActionEvent event) {
+        try {
+            // Obtener el Stage actual
+            Stage currentStage = (Stage) Hipervinculo.getScene().getWindow();
+
+            // Cargar el nuevo FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUP.fxml"));
+            Parent root = loader.load();
+
+            // Inicializar el nuevo controlador en el mismo Stage
+            SignUPController controller = loader.getController();
+            controller.init(currentStage); // ← tu método original
+
+            // Crear nueva escena y asignarla al Stage actual
+            Scene newScene = new Scene(root);
+            currentStage.setScene(newScene);
+            currentStage.setTitle("Sign Up");
+            currentStage.show();
+
+        } catch (IOException e) {
+            LOGGER.severe("Error al abrir ventana de Sign Up: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Error al cargar la ventana de registro").showAndWait();
+        }
+    }
+
+
+
+
+
     //botones-------------------
     private void handlebExitMethod(ActionEvent event){
         Platform.exit();
