@@ -5,6 +5,7 @@
  */
 package proyectosignup.signin.ui;
 
+import java.util.UUID;
 import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
@@ -102,6 +103,41 @@ public class SignUPControllerTest extends ApplicationTest{
        
        
 
+   }
+   
+   @Test
+   public void testCrearUsusario(){
+        clickOn("#tfName");
+       write("Prueba");
+       clickOn("#tfLastname");
+       write("Prueba");
+       clickOn("#tfMidleeInitial");
+       write("A");
+       clickOn("#tfStreet");
+       write("Calle Prueba");
+       clickOn("#tfCity");
+       write("Madrid");
+       clickOn("#tfState");
+       write("Madrid");
+       clickOn("#tfZip");
+       write("28223");
+       clickOn("#tfPhone");
+       write("123456789");
+       clickOn("#tfEmail");
+       write(UUID.randomUUID().toString().substring(0,8) + "@test.com");
+       clickOn("#pwPassword");
+       write("12345678");
+       clickOn("#pfPasswordValidation");
+       write("12345678");
+       
+       clickOn("Sign Up");
+       clickOn("Aceptar");
+   }
+   
+   @Test
+   public void exitButtonToSignIn(){
+       verifyThat("#btExit" , isEnabled());
+       clickOn("#btExit");
    }
    
 }

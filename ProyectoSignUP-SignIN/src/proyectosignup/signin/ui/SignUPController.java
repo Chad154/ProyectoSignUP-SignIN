@@ -1,10 +1,14 @@
 package proyectosignup.signin.ui;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -87,9 +91,34 @@ public class SignUPController {
 
     // ---------------------- BOTONES ----------------------
     private void handlebExitMethod(ActionEvent event) {
-        Platform.exit();
-    }
+    try {
+        // Cerrar la ventana actual
+        Stage ventanaActual = (Stage) btExit.getScene().getWindow();
+        ventanaActual.close();
 
+        // Cargar la ventana de Sign In
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
+        Parent root = loader.load();
+
+        // Crear nueva ventana
+        Stage nuevaVentana = new Stage();
+        nuevaVentana.setTitle("Sign In");
+
+        // Inicializar su controlador (EL init ya se encarga de crear la Scene)
+        SignInController controller = loader.getController();
+        controller.init(nuevaVentana, root);
+
+        // Mostrarla (ya se hace dentro del init, pero si no, puedes dejarlo igual)
+        nuevaVentana.show();
+
+    } catch (IOException e) {
+        LOGGER.severe("Error al abrir la ventana de Sign In: " + e.getMessage());
+        new Alert(Alert.AlertType.ERROR, "Error al cargar la ventana de inicio de sesión").showAndWait();
+    }
+}
+
+
+    //Metodo sobre el comportamiento al pulsar el boton de SignUp
     private void handlebSignUpMethod(ActionEvent event) {
         CustomerRESTClient client = null;
         try {
@@ -116,20 +145,20 @@ public class SignUPController {
                 new Alert(AlertType.INFORMATION, "La contraseña no puede contener más de 255 caracteres").showAndWait();
                 return;
             }
-
-            // Validación ZIP no mas de 9 numeros
+            
+            // Validación ZIP no puede tener mas de 10 numeros
             if (!tfZip.getText().trim().matches("\\d{1,10}")) {
                 new Alert(AlertType.INFORMATION, "El campo ZIP debe contener máximo 10 números.").showAndWait();
                 return;
             }
 
-            // Validación Teléfono no mas de 19 numeros
+            // Validación Teléfono no puede tener mas de 19 numeros
             if (!tfPhone.getText().trim().matches("\\d{1,19}")) {
                 new Alert(AlertType.INFORMATION, "El campo Teléfono debe contener máximo 19 números.").showAndWait();
                 return;
             }
 
-            // Validación Email: debe tener algo antes y después de @
+            // Validación Email debe tener algo antes y después de @
             if (!tfEmail.getText().trim().matches("^.+@.+\\..+$")) {
                 new Alert(AlertType.INFORMATION, "Tu email no es valida debe tener \neste formato ejemplo@ejemplo.ejemplo.").showAndWait();
                 return;
