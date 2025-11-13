@@ -128,8 +128,6 @@ public class SignInController {
         }
 
         CustomerRESTClient resCustomer = new CustomerRESTClient();
-
-        // 🔥 Buscar usuario en el servidor
         Customer customer = resCustomer.findCustomerByEmailPassword_XML(
                 Customer.class,
                 tfUsername.getText().trim(),
@@ -137,17 +135,12 @@ public class SignInController {
         );
 
         resCustomer.close();
-
-        // ⬇️ SI LLEGO AQUÍ, EL LOGIN ES CORRECTO
-
-        // 🔥 Cargar ventana de cambio de contraseña
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CambioContraseña.fxml"));
         Parent root = loader.load();
 
         // Obtener controlador de Change Password
         ChangeController controller = loader.getController();
 
-        // 🔥 Pasar el customer logueado
         controller.setCustomer(customer);
 
         // Inicializar ventana
@@ -258,3 +251,4 @@ public class SignInController {
     }
     
 }
+    
