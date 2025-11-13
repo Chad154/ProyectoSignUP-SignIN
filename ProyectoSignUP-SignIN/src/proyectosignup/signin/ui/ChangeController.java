@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -241,7 +242,8 @@ public class ChangeController {
                      "La contraseña se ha cambiado correctamente para: " + loggedCustomer.getEmail());
 
             client.close();
-            ((Stage) btChange.getScene().getWindow()).close();
+            clearForm();
+            
 
         } catch (InternalServerErrorException e) {
             LOGGER.severe("Error del servidor: " + e.getMessage());
@@ -250,7 +252,9 @@ public class ChangeController {
         } catch (Exception e) {
             LOGGER.warning("Error en cambio de contraseña: " + e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
+            
         }
+        
     }
     
     /**
@@ -259,9 +263,25 @@ public class ChangeController {
      * 
      * @param event El evento de acción del botón
      */
-    private void handleBtcancelOnMethod(ActionEvent event) {
-        ((Stage) btCancel.getScene().getWindow()).close();
+private void handleBtcancelOnMethod(ActionEvent event) {
+    try {
+        // Obtener el stage actual
+        Stage currentStage = (Stage) btCancel.getScene().getWindow();
+
+        // Cargar la ventana de Sign In
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
+        Parent root = loader.load();
+
+        // Obtener su controlador e iniciar
+        SignInController controller = loader.getController();
+        controller.init(currentStage, root);
+
+    } catch (Exception e) {
+        LOGGER.severe("Error al volver a Sign In: " + e.getMessage());
+        new Alert(Alert.AlertType.ERROR, "Error al volver a Sign In").showAndWait();
     }
+}
+
     
     /**
      * Maneja los cambios de focus en el campo de contraseña actual.
@@ -329,4 +349,26 @@ public class ChangeController {
     public Customer getLoggedCustomer() {
         return loggedCustomer;
     }
+    
+    public void clearForm() {
+ 
+    CurrentPassword.textProperty().removeListener(this::handleCurrentPasswordTextChange);
+    NewPassword.textProperty().removeListener(this::handleNewPasswordTextChange);
+    ConfirmPassword.textProperty().removeListener(this::handleConfirmPasswordTextChange);
+
+
+    CurrentPassword.clear();
+    NewPassword.clear();
+    ConfirmPassword.clear();
+
+    CurrentPassword.setStyle("");
+    NewPassword.setStyle("");
+    ConfirmPassword.setStyle("");
+
+
+    CurrentPassword.textProperty().addListener(this::handleCurrentPasswordTextChange);
+    NewPassword.textProperty().addListener(this::handleNewPasswordTextChange);
+    ConfirmPassword.textProperty().addListener(this::handleConfirmPasswordTextChange);
+}
+
 }

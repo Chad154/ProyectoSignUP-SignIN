@@ -110,44 +110,68 @@ public class SignInController {
     private void handlebExitMethod(ActionEvent event){
         Platform.exit();
     }
-    private void handlebLogInMethod(ActionEvent event){
-        try {
-            //validar objetos ventana
+  private void handlebLogInMethod(ActionEvent event){
+    try {
         if (this.tfUsername.getText().trim().equals("") || this.pfPassword.getText().trim().equals("")) {
-            // si los campos no están informados, dará error
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "Los campos usuario y contraseña \n deben estar informados",
                     ButtonType.OK);
-            alert.showAndWait();   
-            //El borde so pondra en rojo en caso de no estar informados
+            alert.showAndWait();
+
             if (this.tfUsername.getText().trim().equals("")) {
                 tfUsername.setStyle("-fx-border-color: red;");
             }
             if (this.pfPassword.getText().trim().equals("")) {
                 pfPassword.setStyle("-fx-border-color: red;");
             }
+            return;
         }
-        //instnciar objeto customer de restful, y un objeto customer para pasar al change password
-        Customer customer = new Customer();
+
         CustomerRESTClient resCustomer = new CustomerRESTClient();
-        //recoger valor del usuario como email
-        customer=resCustomer.findCustomerByEmailPassword_XML(Customer.class, tfUsername.getText().trim(), pfPassword.getText().trim());
-        
-        }catch (InternalServerErrorException e) {
-            LOGGER.warning(e.getLocalizedMessage());
-            new Alert(AlertType.INFORMATION,"ERROR: Problemas con el servidor, "+"\n"+"pruebe mas tarde.").showAndWait();//tipo 500
-        }catch (NotAuthorizedException e) {
-            LOGGER.warning(e.getLocalizedMessage());
-            new Alert(AlertType.INFORMATION,"ERROR: Parametros invalidos").showAndWait();//tipo 400
-        }catch (Exception e) {
-            LOGGER.warning(e.getLocalizedMessage());
-            new Alert(AlertType.INFORMATION,"ERROR").showAndWait();
-        }
 
-        
-        
+        // 🔥 Buscar usuario en el servidor
+        Customer customer = resCustomer.findCustomerByEmailPassword_XML(
+                Customer.class,
+                tfUsername.getText().trim(),
+                pfPassword.getText().trim()
+        );
 
+        resCustomer.close();
+
+        // ⬇️ SI LLEGO AQUÍ, EL LOGIN ES CORRECTO
+
+        // 🔥 Cargar ventana de cambio de contraseña
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CambioContraseña.fxml"));
+        Parent root = loader.load();
+
+        // Obtener controlador de Change Password
+        ChangeController controller = loader.getController();
+
+        // 🔥 Pasar el customer logueado
+        controller.setCustomer(customer);
+
+        // Inicializar ventana
+        Stage currentStage = (Stage) bLogIn.getScene().getWindow();
+        controller.init(currentStage, root);
+
+    } catch (InternalServerErrorException e) {
+        LOGGER.warning(e.getLocalizedMessage());
+        new Alert(AlertType.INFORMATION,
+                "ERROR: Problemas con el servidor, pruebe más tarde.")
+                .showAndWait();
+    } catch (NotAuthorizedException e) {
+        LOGGER.warning(e.getLocalizedMessage());
+        new Alert(AlertType.INFORMATION,
+                "ERROR: Parámetros inválidos")
+                .showAndWait();
+    } catch (Exception e) {
+        LOGGER.warning(e.getLocalizedMessage());
+        new Alert(AlertType.INFORMATION,
+                "ERROR")
+                .showAndWait();
     }
+}
+
     //campos--------------------
     /**
      * 
