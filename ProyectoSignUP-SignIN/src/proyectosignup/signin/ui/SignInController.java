@@ -76,7 +76,7 @@ public class SignInController {
         stage.show();
 
     }
-    //hipervinculo
+    //hipervinculo, inicia la ventana signup y cierra signin
     private void handleHiperVinculoMethod(ActionEvent event) {
         try {
             // Obtener el Stage actual
@@ -107,63 +107,65 @@ public class SignInController {
 
 
     //botones-------------------
+    //cierra el programa
     private void handlebExitMethod(ActionEvent event){
         Platform.exit();
     }
-  private void handlebLogInMethod(ActionEvent event){
-    try {
-        if (this.tfUsername.getText().trim().equals("") || this.pfPassword.getText().trim().equals("")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR,
-                    "Los campos usuario y contraseña \n deben estar informados",
-                    ButtonType.OK);
-            alert.showAndWait();
+    //cierra signin y abre la ventana changepassword
+    private void handlebLogInMethod(ActionEvent event){
+        try {
+            if (this.tfUsername.getText().trim().equals("") || this.pfPassword.getText().trim().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "Los campos usuario y contraseña \n deben estar informados",
+                        ButtonType.OK);
+                alert.showAndWait();
 
-            if (this.tfUsername.getText().trim().equals("")) {
-                tfUsername.setStyle("-fx-border-color: red;");
+                if (this.tfUsername.getText().trim().equals("")) {
+                    tfUsername.setStyle("-fx-border-color: red;");
+                }
+                if (this.pfPassword.getText().trim().equals("")) {
+                    pfPassword.setStyle("-fx-border-color: red;");
+                }
+                return;
             }
-            if (this.pfPassword.getText().trim().equals("")) {
-                pfPassword.setStyle("-fx-border-color: red;");
-            }
-            return;
+
+            CustomerRESTClient resCustomer = new CustomerRESTClient();
+            Customer customer = resCustomer.findCustomerByEmailPassword_XML(
+                    Customer.class,
+                    tfUsername.getText().trim(),
+                    pfPassword.getText().trim()
+            );
+
+            resCustomer.close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CambioContraseña.fxml"));
+            Parent root = loader.load();
+
+            // Obtener controlador de Change Password
+            ChangeController controller = loader.getController();
+
+            controller.setCustomer(customer);
+
+            // Inicializar ventana
+            Stage currentStage = (Stage) bLogIn.getScene().getWindow();
+            controller.init(currentStage, root);
+
+        } catch (InternalServerErrorException e) {
+            LOGGER.warning(e.getLocalizedMessage());
+            new Alert(AlertType.INFORMATION,
+                    "ERROR: Problemas con el servidor, pruebe más tarde.")
+                    .showAndWait();
+        } catch (NotAuthorizedException e) {
+            LOGGER.warning(e.getLocalizedMessage());
+            new Alert(AlertType.INFORMATION,
+                    "ERROR: Usuario o Contraseña incorrectos")
+                    .showAndWait();
+        } catch (Exception e) {
+            LOGGER.warning(e.getLocalizedMessage());
+            new Alert(AlertType.INFORMATION,
+                    "ERROR inesperado, pruebe mas tarde")
+                    .showAndWait();
         }
-
-        CustomerRESTClient resCustomer = new CustomerRESTClient();
-        Customer customer = resCustomer.findCustomerByEmailPassword_XML(
-                Customer.class,
-                tfUsername.getText().trim(),
-                pfPassword.getText().trim()
-        );
-
-        resCustomer.close();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CambioContraseña.fxml"));
-        Parent root = loader.load();
-
-        // Obtener controlador de Change Password
-        ChangeController controller = loader.getController();
-
-        controller.setCustomer(customer);
-
-        // Inicializar ventana
-        Stage currentStage = (Stage) bLogIn.getScene().getWindow();
-        controller.init(currentStage, root);
-
-    } catch (InternalServerErrorException e) {
-        LOGGER.warning(e.getLocalizedMessage());
-        new Alert(AlertType.INFORMATION,
-                "ERROR: Problemas con el servidor, pruebe más tarde.")
-                .showAndWait();
-    } catch (NotAuthorizedException e) {
-        LOGGER.warning(e.getLocalizedMessage());
-        new Alert(AlertType.INFORMATION,
-                "ERROR: Parámetros inválidos")
-                .showAndWait();
-    } catch (Exception e) {
-        LOGGER.warning(e.getLocalizedMessage());
-        new Alert(AlertType.INFORMATION,
-                "ERROR")
-                .showAndWait();
     }
-}
 
     //campos--------------------
     /**

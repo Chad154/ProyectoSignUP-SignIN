@@ -21,7 +21,8 @@ import proyectosignup.signin.logic.CustomerRESTClient;
 import proyectosignup.signin.model.Customer;
 
 public class SignUPController {
-
+    
+    //Declaracion de las variables 
     @FXML
     private TextField tfName;
     @FXML
@@ -53,6 +54,7 @@ public class SignUPController {
 
     private Stage stage;
 
+    //Metodo Init para la ventana
     public void init(Stage stage) {
         try {
             this.stage = stage;
@@ -89,34 +91,35 @@ public class SignUPController {
         }
     }
 
-    // ---------------------- BOTONES ----------------------
+    // Aqui esta todo el codigo sobre el funcionamiento de los botones
+    
+    //Metodo para el funcionamiento al pulsar el boton de exit
     private void handlebExitMethod(ActionEvent event) {
-    try {
-        // Cerrar la ventana actual
-        Stage ventanaActual = (Stage) btExit.getScene().getWindow();
-        ventanaActual.close();
+        try {
+            // Cerrar la ventana actual
+            Stage ventanaActual = (Stage) btExit.getScene().getWindow();
+            ventanaActual.close();
 
-        // Cargar la ventana de Sign In
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
-        Parent root = loader.load();
+            // Cargar la ventana de Sign In
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
+            Parent root = loader.load();
 
-        // Crear nueva ventana
-        Stage nuevaVentana = new Stage();
-        nuevaVentana.setTitle("Sign In");
+            // Crear nueva ventana
+            Stage nuevaVentana = new Stage();
+            nuevaVentana.setTitle("Sign In");
 
-        // Inicializar su controlador (EL init ya se encarga de crear la Scene)
-        SignInController controller = loader.getController();
-        controller.init(nuevaVentana, root);
+            // Inicializar su controlador (EL init ya se encarga de crear la Scene)
+            SignInController controller = loader.getController();
+            controller.init(nuevaVentana, root);
 
-        // Mostrarla (ya se hace dentro del init, pero si no, puedes dejarlo igual)
-        nuevaVentana.show();
+            // Mostrarla (ya se hace dentro del init, pero si no, puedes dejarlo igual)
+            nuevaVentana.show();
 
-    } catch (IOException e) {
-        LOGGER.severe("Error al abrir la ventana de Sign In: " + e.getMessage());
-        new Alert(Alert.AlertType.ERROR, "Error al cargar la ventana de inicio de sesión").showAndWait();
+        } catch (IOException e) {
+            LOGGER.severe("Error al abrir la ventana de Sign In: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Error al cargar la ventana de inicio de sesión").showAndWait();
+        }
     }
-}
-
 
     //Metodo sobre el comportamiento al pulsar el boton de SignUp
     private void handlebSignUpMethod(ActionEvent event) {
@@ -124,7 +127,7 @@ public class SignUPController {
         try {
             //Validacion de el tamaño del campo
             if (tfName.getText().trim().length() > 255) {
-                new Alert(AlertType.INFORMATION, "El nombre no puede contener más de 255 caracteres").showAndWait(); 
+                new Alert(AlertType.INFORMATION, "El nombre no puede contener más de 255 caracteres").showAndWait();
                 return;
             } else if (tfLastname.getText().trim().length() > 255) {
                 new Alert(AlertType.INFORMATION, "El apellido no puede contener más de 255 caracteres").showAndWait();
@@ -145,13 +148,21 @@ public class SignUPController {
                 new Alert(AlertType.INFORMATION, "La contraseña no puede contener más de 255 caracteres").showAndWait();
                 return;
             }
-            
+            //Validacio de que el campo ZIP sean numeros
+            if (!tfZip.getText().trim().matches("\\d+")) {
+                new Alert(AlertType.INFORMATION, "El campo zip tienen que ser numeros").showAndWait();
+                return;
+            }
             // Validación ZIP no puede tener mas de 10 numeros
-            if (!tfZip.getText().trim().matches("\\d{1,10}")) {
+            if (tfZip.getText().trim().length() > 10) {
                 new Alert(AlertType.INFORMATION, "El campo ZIP debe contener máximo 10 números.").showAndWait();
                 return;
             }
-
+            //Validacion de que el campo telefono sean numeros
+            if (!tfPhone.getText().trim().matches("\\d+")) {
+                new Alert(AlertType.INFORMATION, "El campo telefono deben ser numeros.").showAndWait();
+                return;
+            }
             // Validación Teléfono no puede tener mas de 19 numeros
             if (!tfPhone.getText().trim().matches("\\d{1,19}")) {
                 new Alert(AlertType.INFORMATION, "El campo Teléfono debe contener máximo 19 números.").showAndWait();
@@ -195,8 +206,8 @@ public class SignUPController {
 
             new Alert(AlertType.INFORMATION, "Usuario creado correctamente").showAndWait();
             clearForm();
-            
-        //Manejo de excepciones
+
+            //Manejo de excepciones
         } catch (InternalServerErrorException e) {
             LOGGER.warning(e.getLocalizedMessage());
             new Alert(AlertType.INFORMATION, "Error con el servidor").showAndWait();
