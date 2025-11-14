@@ -12,3 +12,23 @@ Change Password: El usuario usando su contraseña antigua, la actualiza a una nu
 3.Una vez realizado estos pasos, ya se puede usar el programa.
 
 # Estructura del proyecto
+ProyectoSignUp-SignIn
+  -ProyectoSignUp.SignIn
+    -ProyectoSignUp.java
+    -ProyectoSignIn.java
+    -ProyectoChangePassword.java
+  -ProyectoSignUp.SignIn.logic
+    -CustomerRESTClient.java
+  -ProyectoSignUp.SignIn.model
+    -Customer.java
+  -ProyectoSignUp.SignIn.ui
+    -CambioContraseña.fxml
+    -ChangeController.java
+    -SignInController.java
+    -SignUp.fxml
+    -SignUpController.java
+    -SignIn.fxml
+  TextPackage
+    -ChangeControllerTest.java
+    -SignInControllerTest.java
+    -SignUPControllerTest.java
